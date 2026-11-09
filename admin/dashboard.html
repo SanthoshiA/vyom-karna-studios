@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Dashboard | Vyom Karna Studios</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="brand">
+                <h2>VYOM KARNA</h2>
+                <span>S T U D I O S</span>
+            </div>
+
+            <p class="menu-heading">STUDIO MANAGEMENT</p>
+
+            <nav>
+                <button class="nav-item active" data-section="overview">
+                    ◈ Dashboard
+                </button>
+                <button class="nav-item" data-section="theme">
+                    ◈ Theme Settings
+                </button>
+                <button class="nav-item" data-section="about">
+                    ◈ About Us
+                </button>
+                <button class="nav-item" data-section="services">
+                    ◈ Services
+                </button>
+                <button class="nav-item" data-section="portfolio">
+                    ◈ Our Creations
+                </button>
+                <button class="nav-item" data-section="contact">
+                    ◈ Contact Details
+                </button>
+                <button class="nav-item" data-section="admins">
+                    ◈ Administrators
+                </button>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <button id="logoutButton" class="logout-button">
+                    ↪ Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+                <div>
+                    <p class="welcome-label">STUDIO MANAGEMENT</p>
+                    <h1>Admin Dashboard</h1>
+                </div>
+
+                <div class="admin-profile">
+                    <span class="profile-icon">VK</span>
+                    <div>
+                        <strong>Administrator</strong>
+                        <small id="adminEmail">Loading...</small>
+                    </div>
+                </div>
+            </header>
+
+            <div id="dashboardMessage" class="message"></div>
+
+            <section id="overview" class="content-section active">
+                <h2>Welcome to Vyom Karna Studios</h2>
+                <p class="section-description">
+                    Manage your website content and studio information
+                    from one place.
+                </p>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span>WEBSITE</span>
+                        <h2>Active</h2>
+                        <p>Your studio website</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>CONTENT</span>
+                        <h2>Manage</h2>
+                        <p>Update website information</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>ACCESS</span>
+                        <h2>Secure</h2>
+                        <p>Authorised administrators</p>
+                    </div>
+                </div>
+
+                <div class="welcome-card">
+                    <h2>Your Story. Our Music.</h2>
+                    <p>
+                        Welcome to your studio control panel.
+                        Update your website, showcase your creations,
+                        and manage your services.
+                    </p>
+                </div>
+            </section>
+
+            <section id="theme" class="content-section">
+                <h2>Theme Settings</h2>
+                <p>Manage your website appearance.</p>
+                <div class="placeholder-card">
+                    Theme management will be configured in the next step.
+                </div>
+            </section>
+
+            <section id="about" class="content-section">
+                <h2>About Us</h2>
+                <p>Update your studio introduction and description.</p>
+                <div class="placeholder-card">
+                    About Us editor will be configured in the next step.
+                </div>
+            </section>
+
+            <section id="services" class="content-section">
+                <h2>Services</h2>
+                <p>Manage the services offered by your studio.</p>
+                <div class="placeholder-card">
+                    Services management will be configured in the next step.
+                </div>
+            </section>
+
+            <section id="portfolio" class="content-section">
+                <h2>Our Creations</h2>
+                <p>Manage your wedding songs, videos and portfolio.</p>
+                <div class="placeholder-card">
+                    Portfolio management will be configured in the next step.
+                </div>
+            </section>
+
+            <section id="contact" class="content-section">
+                <h2>Contact Details</h2>
+                <p>Manage your business contact information.</p>
+                <div class="placeholder-card">
+                    Contact management will be configured in the next step.
+                </div>
+            </section>
+
+            <section id="admins" class="content-section">
+                <h2>Administrators</h2>
+                <p>Manage authorised studio administrators.</p>
+                <div class="placeholder-card">
+                    Administrator management will be configured in the next step.
+                </div>
+            </section>
+
+            <footer>
+                © <span id="year"></span> Vyom Karna Studios.
+                All Rights Reserved.
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/dashboard.js"></script>
+
+</body>
+</html>
