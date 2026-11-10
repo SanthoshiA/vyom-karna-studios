@@ -18,9 +18,10 @@
 
     <!-- HEADER -->
     <header class="header">
-        <a href="#home" class="logo">
-            VYOM KARNA
-            <span>STUDIOS</span>
+        <a href="#home" class="logo" id="siteLogo">
+            <img id="siteLogoImage" alt="Vyom Karna Studios logo" hidden>
+            <span id="siteBrandName">VYOM KARNA</span>
+            <span id="siteBrandTagline">STUDIOS</span>
         </a>
 
         <button class="menu-toggle" id="menuToggle"
@@ -42,33 +43,33 @@
         <!-- HERO SECTION -->
         <section class="hero" id="home">
             <div class="hero-content">
-                <p class="eyebrow">MUSIC • MEMORIES • MAGIC</p>
+                <p class="eyebrow" id="homeEyebrowText">MUSIC • MEMORIES • MAGIC</p>
 
-                <h1 id="heroHeading">
-                    Every Celebration
-                    <span>Has a Story.</span>
+                <h1>
+                    <span id="homeHeadingText">Every Celebration</span>
+                    <span id="homeHeadingAccent">Has a Story.</span>
                 </h1>
 
-                <h2 id="heroSubheading">We Give It a Voice.</h2>
+                <h2 id="homeSubtitleText">We Give It a Voice.</h2>
 
-                <p class="hero-description" id="heroDescription">
+                <p class="hero-description" id="homeDescriptionText">
                     From personalized wedding songs to cinematic
                     celebrations, we create music and memories
                     that last a lifetime.
                 </p>
 
                 <div class="hero-buttons">
-                    <a href="#portfolio" class="btn btn-gold">
+                    <a href="#portfolio" class="btn btn-gold" id="homePrimaryButton">
                         Explore Our Creations
                     </a>
 
-                    <a href="#contact" class="btn btn-outline">
+                    <a href="#contact" class="btn btn-outline" id="homeSecondaryButton">
                         Enquire Now
                     </a>
                 </div>
             </div>
 
-            <div class="hero-art">
+            <div class="hero-art" id="heroArt">
                 <div class="music-symbol">♫</div>
                 <div class="art-title">YOUR STORY</div>
                 <div class="art-subtitle">OUR MUSIC</div>
@@ -85,8 +86,50 @@
                 <p>Every special moment deserves its own soundtrack.</p>
             </div>
 
-            <div class="service-grid" id="serviceGrid" aria-live="polite">
-                <p class="content-loading">Loading studio services...</p>
+            <div class="service-grid" id="serviceGrid">
+
+                <article class="service-card">
+                    <div class="service-icon">💍</div>
+                    <h3>Wedding Songs</h3>
+                    <p>Personalized songs celebrating your love story.</p>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">🎬</div>
+                    <h3>Pre-Wedding Songs</h3>
+                    <p>Beautiful musical memories before your big day.</p>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">🥂</div>
+                    <h3>Reception Songs</h3>
+                    <p>Special music for unforgettable celebrations.</p>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">🎂</div>
+                    <h3>Birthday Songs</h3>
+                    <p>Unique songs created for your loved ones.</p>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">🪔</div>
+                    <h3>Devotional Songs</h3>
+                    <p>Devotional music composed with feeling.</p>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">❤️</div>
+                    <h3>Love Songs</h3>
+                    <p>Turn your feelings into beautiful melodies.</p>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">👨‍👩‍👧‍👦</div>
+                    <h3>Family & Event Songs</h3>
+                    <p>Celebrate family bonds and special occasions.</p>
+                </article>
+
             </div>
         </section>
 
@@ -125,27 +168,40 @@
                 <p>Explore our musical and cinematic creations.</p>
             </div>
 
-            <div class="portfolio-grid" id="portfolioGrid" aria-live="polite">
-                <p class="content-loading">Our latest creations will appear here.</p>
+            <div class="portfolio-placeholder" id="portfolioGrid">
+                <div class="music-symbol">♫</div>
+                <h3>Our Creative Gallery</h3>
+                <p>
+                    Our latest wedding songs, music videos and
+                    cinematic productions will be showcased here.
+                </p>
+                <a href="#contact" class="text-link">
+                    Request a sample →
+                </a>
             </div>
         </section>
 
         <!-- CONTACT -->
         <section class="contact-section" id="contact">
             <p class="eyebrow">LET'S CREATE SOMETHING SPECIAL</p>
-            <h2 id="contactHeading">Tell Us Your <span>Story.</span></h2>
+            <h2>Tell Us Your <span>Story.</span></h2>
 
             <p id="contactMessage">
                 Have a wedding, birthday or special event coming up?
                 Let's create something unforgettable together.
             </p>
 
-            <div class="contact-actions">
-                <a id="contactEmailLink" href="mailto:contact@vyomkarnastudios.com" class="btn btn-gold">Email Our Studio</a>
-                <a id="contactWhatsappLink" class="btn btn-outline" href="#" hidden>WhatsApp Us</a>
-            </div>
-            <div class="social-links" id="socialLinks"></div>
-            <p class="contact-note" id="contactPhoneText"></p>
+            <a href="mailto:contact@vyomkarnastudios.com" id="contactEmailLink"
+               class="btn btn-gold">
+                Email Our Studio
+            </a>
+            <p id="contactPhoneText"></p>
+            <a href="#" id="contactWhatsappLink" hidden>WhatsApp Us</a>
+            <div id="socialLinks"></div>
+
+            <p class="contact-note">
+                WhatsApp booking details will be added before launch.
+            </p>
         </section>
 
     </main>
@@ -153,11 +209,11 @@
     <!-- FOOTER -->
     <footer class="footer">
         <a href="#home" class="logo">
-            VYOM KARNA
-            <span>STUDIOS</span>
+            <span id="footerBrandName">VYOM KARNA</span>
+            <span id="footerBrandTagline">STUDIOS</span>
         </a>
 
-        <p id="footerTagline">Every celebration has a story. We give it a voice.</p>
+        <p>Every celebration has a story. We give it a voice.</p>
 
         <p class="copyright">
             © <span id="year"></span> Vyom Karna Studios.

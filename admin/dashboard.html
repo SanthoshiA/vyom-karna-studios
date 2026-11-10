@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Admin Dashboard | Vyom Karna Studios</title>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow"><title>Admin Dashboard | Vyom Karna Studios</title>
   <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
@@ -12,8 +10,9 @@
   <aside class="sidebar">
     <div class="brand"><h2>VYOM KARNA</h2><span>S T U D I O S</span></div>
     <p class="menu-heading">STUDIO MANAGEMENT</p>
-    <nav aria-label="Studio management">
+    <nav>
       <button class="nav-item active" data-section="overview">◈ Dashboard</button>
+      <button class="nav-item" data-section="home">◈ Home Page</button>
       <button class="nav-item" data-section="theme">◈ Theme Settings</button>
       <button class="nav-item" data-section="about">◈ About Us</button>
       <button class="nav-item" data-section="services">◈ Services</button>
@@ -23,109 +22,60 @@
     </nav>
     <div class="sidebar-bottom"><button id="logoutButton" class="logout-button">↪ Sign Out</button></div>
   </aside>
-
   <main class="main-content">
-    <header class="topbar">
-      <div><p class="welcome-label">STUDIO MANAGEMENT</p><h1 id="pageTitle">Admin Dashboard</h1></div>
+    <header class="topbar"><div><p class="welcome-label">STUDIO MANAGEMENT</p><h1 id="pageTitle">Admin Dashboard</h1></div>
       <div class="admin-profile"><span class="profile-icon">VK</span><div><strong>Administrator</strong><small id="adminEmail">Loading...</small></div></div>
     </header>
-
     <div id="dashboardMessage" class="message" role="status" aria-live="polite"></div>
-
     <section id="overview" class="content-section active">
-      <h2>Welcome to Vyom Karna Studios</h2>
-      <p class="section-description">Manage your website content and studio information from one place.</p>
-      <div class="stats-grid">
-        <div class="stat-card"><span>ACTIVE SERVICES</span><h2 id="serviceCount">—</h2><p>Services visible on your website</p></div>
-        <div class="stat-card"><span>PUBLISHED CREATIONS</span><h2 id="portfolioCount">—</h2><p>Portfolio items visible publicly</p></div>
-        <div class="stat-card"><span>ADMIN ACCOUNT</span><h2>Secure</h2><p id="overviewEmail">Authenticated administrator</p></div>
-      </div>
-      <div class="welcome-card"><h2>Your Story. Our Music.</h2><p>Use the menu to update your studio website. Changes are saved to Supabase and loaded by the public website.</p></div>
+      <h2>Welcome to Vyom Karna Studios</h2><p class="section-description">Manage your website content and studio information from one place.</p>
+      <div class="stats-grid"><div class="stat-card"><span>WEBSITE</span><h2>Active</h2><p>Your studio website</p></div><div class="stat-card"><span>CONTENT</span><h2>Manage</h2><p>Update website information</p></div><div class="stat-card"><span>ACCESS</span><h2>Secure</h2><p>Authorised administrators</p></div></div>
+      <div class="welcome-card"><h2>Your Story. Our Music.</h2><p>Welcome to your studio control panel. Update your website, showcase your creations, and manage your services.</p><p>Signed in as: <strong id="overviewEmail"></strong></p><small id="currentAdminDetails"></small></div>
     </section>
-
-    <section id="theme" class="content-section">
-      <h2>Theme Settings</h2><p class="section-description">Change the public website colours and typography. Preview the website after saving.</p>
-      <form id="themeForm" class="editor-card">
-        <div class="form-grid">
-          <label>Background colour<input type="color" id="themeBackground" value="#130d0c"></label>
-          <label>Card / surface colour<input type="color" id="themeSurface" value="#211514"></label>
-          <label>Primary gold colour<input type="color" id="themeGold" value="#d6ad53"></label>
-          <label>Light gold colour<input type="color" id="themeGoldLight" value="#f1d48c"></label>
-          <label>Text colour<input type="color" id="themeText" value="#f8f1e7"></label>
-          <label>Muted text colour<input type="color" id="themeMuted" value="#c2b3a6"></label>
-          <label class="full-width">Website font<select id="themeFont"><option value="Segoe UI, Arial, sans-serif">Modern (Segoe UI)</option><option value="Arial, sans-serif">Arial</option><option value="Georgia, serif">Georgia</option><option value="Verdana, sans-serif">Verdana</option></select></label>
-        </div>
-        <div class="form-actions"><button class="primary-button" type="submit">Save Theme Settings</button><a class="secondary-button" href="../index.html" target="_blank" rel="noopener">Preview Website</a></div>
+    <section id="home" class="content-section">
+      <h2>Home Page</h2><p class="section-description">Update the public homepage without editing website code.</p>
+      <form id="homeForm" class="editor-form">
+        <label>Brand / Studio name<input id="homeBrandName" maxlength="80" required></label>
+        <label>Brand tagline<input id="homeTagline" maxlength="120"></label>
+        <label>Hero eyebrow / small heading<input id="homeEyebrow" maxlength="120"></label>
+        <label>Main heading<input id="homeHeading" maxlength="160" required></label>
+        <label>Highlighted heading text<input id="homeHeadingAccent" maxlength="100"></label>
+        <label>Subtitle<input id="homeSubtitle" maxlength="160"></label>
+        <label>Hero description<textarea id="homeDescription" rows="4" maxlength="600"></textarea></label>
+        <label>Primary button text<input id="homePrimaryText" maxlength="60"></label>
+        <label>Primary button link<input id="homePrimaryUrl" maxlength="300" placeholder="#portfolio"></label>
+        <label>Secondary button text<input id="homeSecondaryText" maxlength="60"></label>
+        <label>Secondary button link<input id="homeSecondaryUrl" maxlength="300" placeholder="#contact"></label>
+        <div class="upload-field"><label for="homeLogoFile">Logo image (PNG, JPG or WebP; max 5 MB)</label><input type="file" id="homeLogoFile" accept="image/png,image/jpeg,image/webp"><img id="homeLogoPreview" class="upload-preview" alt="Logo preview" hidden><small id="homeLogoStatus"></small></div>
+        <div class="upload-field"><label for="homeHeroFile">Hero/banner image (PNG, JPG or WebP; max 5 MB)</label><input type="file" id="homeHeroFile" accept="image/png,image/jpeg,image/webp"><img id="homeHeroPreview" class="upload-preview" alt="Hero preview" hidden><small id="homeHeroStatus"></small></div>
+        <button type="submit" class="primary-button">Save Home Page</button>
       </form>
     </section>
-
-    <section id="about" class="content-section">
-      <h2>About Us</h2><p class="section-description">Edit the introduction and creative process displayed on your public website.</p>
-      <form id="aboutForm" class="editor-card">
-        <label>Eyebrow / small heading<input id="aboutEyebrow" maxlength="100" placeholder="THE ART OF PERSONALIZATION"></label>
-        <label>Main heading<input id="aboutHeading" maxlength="160" placeholder="Your Memories. Our Music."></label>
-        <label>Description<textarea id="aboutDescription" rows="5" placeholder="Tell visitors about your studio..."></textarea></label>
-        <label>Features (one per line)<textarea id="aboutFeatures" rows="6" placeholder="Custom Lyrics & Songwriting&#10;Original Music Composition"></textarea></label>
-        <div class="form-actions"><button class="primary-button" type="submit">Save About Us</button></div>
+    <section id="theme" class="content-section"><h2>Theme Settings</h2><p class="section-description">Manage your website appearance.</p>
+      <form id="themeForm" class="editor-form">
+        <label>Background<input type="color" id="themeBackground"></label><label>Surface<input type="color" id="themeSurface"></label>
+        <label>Gold<input type="color" id="themeGold"></label><label>Light gold<input type="color" id="themeGoldLight"></label>
+        <label>Text<input type="color" id="themeText"></label><label>Muted text<input type="color" id="themeMuted"></label>
+        <label>Font family<input id="themeFont" maxlength="100"></label><button type="submit" class="primary-button">Save Theme</button>
       </form>
     </section>
-
-    <section id="services" class="content-section">
-      <h2>Services</h2><p class="section-description">Add, edit, publish or remove the services shown on your website.</p>
-      <form id="serviceForm" class="editor-card">
-        <input type="hidden" id="serviceId">
-        <div class="form-grid">
-          <label>Service title<input id="serviceTitle" required maxlength="120" placeholder="Wedding Songs"></label>
-          <label>Icon / emoji<input id="serviceIcon" maxlength="12" placeholder="💍"></label>
-          <label class="full-width">Description<textarea id="serviceDescription" rows="3" required placeholder="Describe this service..."></textarea></label>
-          <label>Display order<input id="serviceOrder" type="number" min="0" value="0"></label>
-          <label class="checkbox-label"><input id="serviceActive" type="checkbox" checked> Active (visible on website)</label>
-        </div>
-        <div class="form-actions"><button class="primary-button" type="submit" id="serviceSaveButton">Add Service</button><button class="secondary-button" type="button" id="serviceCancelButton" hidden>Cancel Edit</button></div>
-      </form>
-      <div class="table-card"><div class="table-heading"><h3>Existing Services</h3><button class="secondary-button" type="button" id="refreshServices">Refresh</button></div><div class="table-wrap"><table><thead><tr><th>Service</th><th>Description</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead><tbody id="servicesTable"><tr><td colspan="5">Loading services...</td></tr></tbody></table></div></div>
+    <section id="about" class="content-section"><h2>About Us</h2><p class="section-description">Update your studio introduction and description.</p>
+      <form id="aboutForm" class="editor-form"><label>Eyebrow<input id="aboutEyebrow"></label><label>Heading<input id="aboutHeading"></label><label>Description<textarea id="aboutDescription" rows="5"></textarea></label><label>Features (one per line)<textarea id="aboutFeatures" rows="6"></textarea></label><button type="submit" class="primary-button">Save About Us</button></form>
     </section>
-
-    <section id="portfolio" class="content-section">
-      <h2>Our Creations</h2><p class="section-description">Showcase wedding songs, music videos and cinematic productions. Use a YouTube link or thumbnail image URL.</p>
-      <form id="portfolioForm" class="editor-card">
-        <input type="hidden" id="portfolioId">
-        <label>Creation title<input id="portfolioTitle" required maxlength="160" placeholder="A Wedding Song for ..."></label>
-        <label>Description<textarea id="portfolioDescription" rows="3" placeholder="A short description"></textarea></label>
-        <label>YouTube video URL<input id="portfolioYoutube" type="url" placeholder="https://www.youtube.com/watch?v=..."></label>
-        <label>Thumbnail image URL<input id="portfolioThumbnail" type="url" placeholder="https://..."></label>
-        <div class="form-grid"><label>Display order<input id="portfolioOrder" type="number" min="0" value="0"></label><label class="checkbox-label"><input id="portfolioPublished" type="checkbox" checked> Published (visible on website)</label></div>
-        <div class="form-actions"><button class="primary-button" type="submit" id="portfolioSaveButton">Add Creation</button><button class="secondary-button" type="button" id="portfolioCancelButton" hidden>Cancel Edit</button></div>
-      </form>
-      <div class="table-card"><div class="table-heading"><h3>Existing Creations</h3><button class="secondary-button" type="button" id="refreshPortfolio">Refresh</button></div><div class="table-wrap"><table><thead><tr><th>Title</th><th>Video</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead><tbody id="portfolioTable"><tr><td colspan="5">Loading creations...</td></tr></tbody></table></div></div>
+    <section id="services" class="content-section"><h2>Services</h2><p class="section-description">Manage the services offered by your studio.</p>
+      <p>Active services: <strong id="serviceCount">0</strong></p><form id="serviceForm" class="editor-form"><input type="hidden" id="serviceId"><label>Service title<input id="serviceTitle" required></label><label>Description<textarea id="serviceDescription" rows="3"></textarea></label><label>Icon / emoji<input id="serviceIcon"></label><label>Display order<input type="number" id="serviceOrder" value="0"></label><label><input type="checkbox" id="serviceActive" checked> Active</label><div><button id="serviceSaveButton" type="submit" class="primary-button">Add Service</button> <button id="serviceCancelButton" type="button" hidden>Cancel</button></div></form>
+      <button id="refreshServices" type="button">Refresh services</button><div class="table-wrap"><table><thead><tr><th>Service</th><th>Description</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead><tbody id="servicesTable"></tbody></table></div>
     </section>
-
-    <section id="contact" class="content-section">
-      <h2>Contact Details</h2><p class="section-description">Update the contact methods and social links shown on your website.</p>
-      <form id="contactForm" class="editor-card">
-        <div class="form-grid">
-          <label>Public email<input id="contactEmail" type="email" placeholder="contact@example.com"></label>
-          <label>Phone number<input id="contactPhone" type="tel" placeholder="+91 ..."></label>
-          <label>WhatsApp number<input id="contactWhatsapp" type="tel" placeholder="91XXXXXXXXXX (country code, no +)"></label>
-          <label>Instagram URL<input id="contactInstagram" type="url" placeholder="https://instagram.com/..."></label>
-          <label>YouTube channel URL<input id="contactYoutube" type="url" placeholder="https://youtube.com/@..."></label>
-          <label>Facebook URL<input id="contactFacebook" type="url" placeholder="https://facebook.com/..."></label>
-          <label class="full-width">Contact section message<textarea id="contactMessage" rows="3" placeholder="Have a wedding or special event coming up?"></textarea></label>
-        </div>
-        <div class="form-actions"><button class="primary-button" type="submit">Save Contact Details</button></div>
-      </form>
+    <section id="portfolio" class="content-section"><h2>Our Creations</h2><p class="section-description">Manage your wedding songs, videos and portfolio.</p>
+      <p>Published creations: <strong id="portfolioCount">0</strong></p><form id="portfolioForm" class="editor-form"><input type="hidden" id="portfolioId"><label>Title<input id="portfolioTitle" required></label><label>Description<textarea id="portfolioDescription" rows="3"></textarea></label><label>YouTube URL<input type="url" id="portfolioYoutube"></label><label>Thumbnail image URL<input type="url" id="portfolioThumbnail"></label><label>Display order<input type="number" id="portfolioOrder" value="0"></label><label><input type="checkbox" id="portfolioPublished" checked> Published</label><div><button id="portfolioSaveButton" type="submit" class="primary-button">Add Creation</button> <button id="portfolioCancelButton" type="button" hidden>Cancel</button></div></form>
+      <button id="refreshPortfolio" type="button">Refresh creations</button><div class="table-wrap"><table><thead><tr><th>Creation</th><th>Video</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead><tbody id="portfolioTable"></tbody></table></div>
     </section>
-
-    <section id="admins" class="content-section">
-      <h2>Administrators</h2><p class="section-description">Administrator access is controlled through Supabase Authentication and the admin_users allow-list.</p>
-      <div class="welcome-card"><h3>Current signed-in administrator</h3><p id="currentAdminDetails">Loading account...</p><hr><p>For security, this browser dashboard does not create or remove administrator accounts. To add an administrator, create/invite the user in Supabase Authentication, then add that user's Auth UID to <code>public.admin_users</code> using the Supabase SQL Editor. To revoke access, remove that UID from the allow-list.</p><p><strong>Never share your Supabase secret or service-role key.</strong></p></div>
+    <section id="contact" class="content-section"><h2>Contact Details</h2><p class="section-description">Manage your business contact information.</p>
+      <form id="contactForm" class="editor-form"><label>Email<input type="email" id="contactEmail"></label><label>Phone<input id="contactPhone"></label><label>WhatsApp number with country code<input id="contactWhatsapp"></label><label>Instagram URL<input type="url" id="contactInstagram"></label><label>YouTube URL<input type="url" id="contactYoutube"></label><label>Facebook URL<input type="url" id="contactFacebook"></label><label>Contact message<textarea id="contactMessage" rows="3"></textarea></label><button type="submit" class="primary-button">Save Contact Details</button></form>
     </section>
-
+    <section id="admins" class="content-section"><h2>Administrators</h2><p class="section-description">Administrator access is controlled by Supabase Auth and the admin_users table.</p><p>Current administrator: <strong id="adminEmailSummary"></strong></p><p>To add your husband's account, create his Supabase Auth user and add his user ID to <code>public.admin_users</code>. We will add a safe admin-management interface in a later step.</p></section>
     <footer>© <span id="year"></span> Vyom Karna Studios. All Rights Reserved.</footer>
   </main>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js"></script>
-<script src="js/dashboard.js"></script>
-</body>
-</html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/dashboard.js"></script>
+</body></html>

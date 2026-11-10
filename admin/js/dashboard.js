@@ -52,6 +52,7 @@ async function requireAdmin() {
   currentUser = user;
   $('adminEmail').textContent = user.email || 'Administrator';
   $('overviewEmail').textContent = user.email || 'Authenticated administrator';
+  $('adminEmailSummary').textContent = user.email || 'Administrator';
   $('currentAdminDetails').textContent = `${user.email || 'Administrator'} (Auth UID: ${user.id})`;
   return true;
 }
@@ -65,6 +66,7 @@ function activateSection(sectionId) {
   });
   const activeButton = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
   $('pageTitle').textContent = activeButton ? activeButton.textContent.replace('◈', '').trim() : 'Admin Dashboard';
+  if (sectionId === 'home') loadHome();
   if (sectionId === 'theme') loadTheme();
   if (sectionId === 'about') loadAbout();
   if (sectionId === 'services') loadServices();
@@ -82,6 +84,85 @@ $('logoutButton').addEventListener('click', async () => {
   window.location.replace('index.html');
 });
 $('year').textContent = new Date().getFullYear();
+
+
+// Home page editor and Supabase Storage image uploads.
+let homeContentCache = {};
+const HOME_DEFAULTS = {
+  brandName: 'VYOM KARNA', tagline: 'STUDIOS', eyebrow: 'MUSIC • MEMORIES • MAGIC',
+  heading: 'Every Celebration', headingAccent: 'Has a Story.', subtitle: 'We Give It a Voice.',
+  description: 'From personalized wedding songs to cinematic celebrations, we create music and memories that last a lifetime.',
+  primaryText: 'Explore Our Creations', primaryUrl: '#portfolio',
+  secondaryText: 'Enquire Now', secondaryUrl: '#contact', logoUrl: '', heroImageUrl: ''
+};
+
+function setImagePreview(inputId, previewId, url) {
+  const input = $(inputId); const preview = $(previewId);
+  if (url) { preview.src = url; preview.hidden = false; }
+  else { preview.removeAttribute('src'); preview.hidden = true; }
+}
+
+async function loadHome() {
+  try {
+    const row = await getContent('home');
+    homeContentCache = { ...HOME_DEFAULTS, ...(row?.content_value || {}) };
+    const fields = { homeBrandName: 'brandName', homeTagline: 'tagline', homeEyebrow: 'eyebrow',
+      homeHeading: 'heading', homeHeadingAccent: 'headingAccent', homeSubtitle: 'subtitle',
+      homeDescription: 'description', homePrimaryText: 'primaryText', homePrimaryUrl: 'primaryUrl',
+      homeSecondaryText: 'secondaryText', homeSecondaryUrl: 'secondaryUrl' };
+    Object.entries(fields).forEach(([id, key]) => { $(id).value = homeContentCache[key] || ''; });
+    setImagePreview('homeLogoFile', 'homeLogoPreview', homeContentCache.logoUrl);
+    setImagePreview('homeHeroFile', 'homeHeroPreview', homeContentCache.heroImageUrl);
+    $('homeLogoStatus').textContent = homeContentCache.logoUrl ? 'Current logo is saved.' : 'No logo uploaded yet.';
+    $('homeHeroStatus').textContent = homeContentCache.heroImageUrl ? 'Current banner is saved.' : 'No banner uploaded yet.';
+  } catch (error) { showMessage(`Could not load Home Page: ${error.message}`, 'error'); }
+}
+
+async function uploadHomeImage(file, kind) {
+  if (!file) return '';
+  const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+  if (!allowed.includes(file.type)) throw new Error('Please choose a JPG, PNG or WebP image.');
+  if (file.size > 5 * 1024 * 1024) throw new Error('Image must be 5 MB or smaller.');
+  const extension = file.type === 'image/jpeg' ? 'jpg' : file.type.split('/')[1];
+  const path = `home/${kind}-${crypto.randomUUID()}.${extension}`;
+  const { error } = await supabaseClient.storage.from('site-assets').upload(path, file, {
+    cacheControl: '3600', upsert: false, contentType: file.type
+  });
+  if (error) throw error;
+  return supabaseClient.storage.from('site-assets').getPublicUrl(path).data.publicUrl;
+}
+
+$('homeLogoFile').addEventListener('change', () => {
+  const file = $('homeLogoFile').files[0]; if (file) setImagePreview('homeLogoFile', 'homeLogoPreview', URL.createObjectURL(file));
+});
+$('homeHeroFile').addEventListener('change', () => {
+  const file = $('homeHeroFile').files[0]; if (file) setImagePreview('homeHeroFile', 'homeHeroPreview', URL.createObjectURL(file));
+});
+$('homeForm').addEventListener('submit', async event => {
+  event.preventDefault(); const button = event.submitter; setBusy(button, true);
+  try {
+    const next = {
+      brandName: $('homeBrandName').value.trim(), tagline: $('homeTagline').value.trim(),
+      eyebrow: $('homeEyebrow').value.trim(), heading: $('homeHeading').value.trim(),
+      headingAccent: $('homeHeadingAccent').value.trim(), subtitle: $('homeSubtitle').value.trim(),
+      description: $('homeDescription').value.trim(), primaryText: $('homePrimaryText').value.trim(),
+      primaryUrl: $('homePrimaryUrl').value.trim(), secondaryText: $('homeSecondaryText').value.trim(),
+      secondaryUrl: $('homeSecondaryUrl').value.trim(), logoUrl: homeContentCache.logoUrl || '',
+      heroImageUrl: homeContentCache.heroImageUrl || ''
+    };
+    const logoFile = $('homeLogoFile').files[0]; const heroFile = $('homeHeroFile').files[0];
+    if (logoFile) { $('homeLogoStatus').textContent = 'Uploading logo...'; next.logoUrl = await uploadHomeImage(logoFile, 'logo'); }
+    if (heroFile) { $('homeHeroStatus').textContent = 'Uploading banner...'; next.heroImageUrl = await uploadHomeImage(heroFile, 'hero'); }
+    await saveContent('home', next); homeContentCache = next;
+    $('homeLogoFile').value = ''; $('homeHeroFile').value = '';
+    setImagePreview('homeLogoFile', 'homeLogoPreview', next.logoUrl);
+    setImagePreview('homeHeroFile', 'homeHeroPreview', next.heroImageUrl);
+    $('homeLogoStatus').textContent = next.logoUrl ? 'Logo saved.' : 'No logo uploaded.';
+    $('homeHeroStatus').textContent = next.heroImageUrl ? 'Banner saved.' : 'No banner uploaded.';
+    showMessage('Home Page saved successfully. Refresh the public website to see changes.');
+  } catch (error) { showMessage(`Home Page save failed: ${error.message}`, 'error'); }
+  finally { setBusy(button, false); }
+});
 
 async function loadTheme() {
   const { data, error } = await supabaseClient.from('site_settings')

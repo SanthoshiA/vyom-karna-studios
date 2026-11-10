@@ -551,3 +551,89 @@ button {
 .social-links{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:20px}
 .social-links a{color:var(--gold-light);text-decoration:underline;text-underline-offset:4px}
 body{font-family:var(--site-font,"Segoe UI",Arial,sans-serif)}
+
+
+/* ==========================================
+   VYOM KARNA STUDIOS
+   DASHBOARD-CONTROLLED THEME
+   ========================================== */
+
+body {
+    background: var(--background);
+    color: var(--text);
+}
+
+.header,
+.footer {
+    background: var(--background);
+}
+
+.hero {
+    background:
+        radial-gradient(
+            ellipse at 80% 40%,
+            var(--surface-light),
+            transparent 55%
+        ),
+        linear-gradient(
+            115deg,
+            var(--background),
+            var(--surface),
+            var(--background)
+        );
+}
+
+.hero-art {
+    background: radial-gradient(
+        circle,
+        var(--surface-light),
+        var(--background) 75%
+    );
+}
+
+.services,
+.portfolio {
+    background: var(--background);
+}
+
+.service-card,
+.portfolio-placeholder {
+    background: var(--surface);
+}
+
+.creative-section,
+.contact-section {
+    background: linear-gradient(
+        130deg,
+        var(--surface),
+        var(--background)
+    );
+}
+
+.navigation {
+    background: var(--background);
+}
+
+.btn-gold {
+    background: linear-gradient(
+        120deg,
+        var(--gold),
+        var(--gold-light)
+    );
+    color: var(--background);
+}
+
+.btn-outline:hover {
+    background: var(--gold);
+    color: var(--background);
+}
+
+@media (max-width: 700px) {
+    .navigation {
+        background: var(--surface);
+    }
+}
+
+
+/* Dashboard-managed homepage branding */
+.logo img { max-width: 54px; max-height: 44px; object-fit: contain; vertical-align: middle; margin-right: 8px; }
