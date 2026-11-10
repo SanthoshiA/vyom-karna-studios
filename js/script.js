@@ -79,19 +79,9 @@ function renderHome(value = {}) {
   if (logo && logoUrl) { logo.src = logoUrl; logo.hidden = false; }
   const hero = document.getElementById('heroArt');
   const heroUrl = safeUrl(value.heroImageUrl || '');
-  if (hero) {
-    hero.classList.toggle('has-custom-image', Boolean(heroUrl));
-    if (heroUrl) {
-      hero.style.backgroundImage = `url("${heroUrl}")`;
-      hero.style.backgroundSize = 'contain';
-      hero.style.backgroundRepeat = 'no-repeat';
-      hero.style.backgroundPosition = 'center';
-    } else {
-      hero.style.backgroundImage = '';
-      hero.style.backgroundSize = '';
-      hero.style.backgroundRepeat = '';
-      hero.style.backgroundPosition = '';
-    }
+  if (hero && heroUrl) {
+    hero.style.backgroundImage = `linear-gradient(rgba(24,37,27,.25), rgba(24,37,27,.55)), url("${heroUrl}")`;
+    hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center';
   }
   [['homePrimaryButton', value.primaryText, value.primaryUrl],
    ['homeSecondaryButton', value.secondaryText, value.secondaryUrl]].forEach(([id, text, href]) => {
@@ -131,6 +121,23 @@ function renderServices(items) {
   }));
 }
 
+function getYouTubeVideoId(value) {
+  try {
+    const url = new URL(value);
+    const host = url.hostname.toLowerCase().replace(/^www\./, '').replace(/^m\./, '');
+    let id = '';
+    if (host === 'youtu.be') id = url.pathname.split('/').filter(Boolean)[0] || '';
+    else if (host === 'youtube.com' || host === 'youtube-nocookie.com') {
+      if (url.pathname === '/watch') id = url.searchParams.get('v') || '';
+      else {
+        const parts = url.pathname.split('/').filter(Boolean);
+        if (['embed', 'shorts', 'live', 'v'].includes(parts[0])) id = parts[1] || '';
+      }
+    }
+    return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : '';
+  } catch { return ''; }
+}
+
 function renderPortfolio(items) {
   const grid = document.getElementById('portfolioGrid');
   if (!grid) return;
@@ -144,11 +151,17 @@ function renderPortfolio(items) {
     const card = document.createElement('article');
     card.className = 'portfolio-card';
 
-    if (item.thumbnail_url && safeUrl(item.thumbnail_url)) {
+    const videoId = getYouTubeVideoId(item.youtube_url || '');
+    const generatedThumbnail = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
+    // Prefer the generated YouTube thumbnail so old records with a video URL
+    // mistakenly saved as the thumbnail URL still render correctly.
+    const thumbnailUrl = generatedThumbnail || safeUrl(item.thumbnail_url || '');
+    if (thumbnailUrl) {
       const image = document.createElement('img');
-      image.src = safeUrl(item.thumbnail_url);
+      image.src = thumbnailUrl;
       image.alt = item.title || 'Studio creation';
       image.loading = 'lazy';
+      image.onerror = () => { image.remove(); };
       card.appendChild(image);
     }
 
@@ -203,7 +216,7 @@ function renderContact(value = {}) {
 
   if (emailLink && value.email) {
     emailLink.href = `mailto:${value.email}`;
-    emailLink.textContent = `Email - ${value.email}`;
+    emailLink.textContent = `Email ${value.email}`;
   }
 
   const phone = document.getElementById('contactPhoneText');

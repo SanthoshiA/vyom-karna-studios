@@ -336,3 +336,10 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .table-wrap table { width: 100%; border-collapse: collapse; }
 .table-wrap th, .table-wrap td { padding: 10px; text-align: left; border-bottom: 1px solid rgba(201,164,92,.2); }
 @media (max-width: 700px) { .editor-form { grid-template-columns: 1fr; } }
+
+
+/* YouTube thumbnail preview in Our Creations */
+.portfolio-thumbnail-field { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.portfolio-thumbnail-field strong { color: #e2b956; font-size: 13px; }
+#portfolioThumbnailPreview { width: min(100%, 360px); max-height: 203px; aspect-ratio: 16 / 9; object-fit: cover; background: #1a100e; }
+#portfolioThumbnailStatus { color: #c8b8aa; font-size: 12px; }

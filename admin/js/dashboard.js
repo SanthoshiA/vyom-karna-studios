@@ -278,6 +278,48 @@ $('serviceForm').addEventListener('submit', async event => {
   resetServiceForm(); showMessage('Service saved successfully.'); await loadServices();
 });
 
+function getYouTubeVideoId(value) {
+  try {
+    const url = new URL(value);
+    const host = url.hostname.toLowerCase().replace(/^www\./, '').replace(/^m\./, '');
+    let id = '';
+    if (host === 'youtu.be') id = url.pathname.split('/').filter(Boolean)[0] || '';
+    else if (host === 'youtube.com' || host === 'youtube-nocookie.com') {
+      if (url.pathname === '/watch') id = url.searchParams.get('v') || '';
+      else {
+        const parts = url.pathname.split('/').filter(Boolean);
+        if (['embed', 'shorts', 'live', 'v'].includes(parts[0])) id = parts[1] || '';
+      }
+    }
+    return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : '';
+  } catch { return ''; }
+}
+
+function updatePortfolioThumbnailPreview() {
+  const value = $('portfolioYoutube').value.trim();
+  const preview = $('portfolioThumbnailPreview');
+  const status = $('portfolioThumbnailStatus');
+  const videoId = getYouTubeVideoId(value);
+  if (!value) {
+    preview.removeAttribute('src'); preview.hidden = true;
+    status.textContent = 'Paste a YouTube link to preview its thumbnail automatically.';
+    return;
+  }
+  if (!videoId) {
+    preview.removeAttribute('src'); preview.hidden = true;
+    status.textContent = 'Please enter a valid YouTube video link.';
+    return;
+  }
+  preview.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  preview.hidden = false;
+  status.textContent = 'Thumbnail generated automatically from your YouTube video.';
+}
+$('portfolioYoutube').addEventListener('input', updatePortfolioThumbnailPreview);
+$('portfolioThumbnailPreview').addEventListener('error', () => {
+  $('portfolioThumbnailStatus').textContent = 'YouTube thumbnail could not be loaded. Check that the video link is correct.';
+  $('portfolioThumbnailPreview').hidden = true;
+});
+
 async function loadPortfolio() {
   const tbody = $('portfolioTable'); tbody.innerHTML = '<tr><td colspan="5">Loading creations...</td></tr>';
   const { data, error } = await supabaseClient.from('site_portfolio')
@@ -294,7 +336,7 @@ $('portfolioTable').addEventListener('click', async event => {
     const item = portfolioCache.find(x => x.id === editId); if (!item) return;
     $('portfolioId').value = item.id; $('portfolioTitle').value = item.title || '';
     $('portfolioDescription').value = item.description || ''; $('portfolioYoutube').value = item.youtube_url || '';
-    $('portfolioThumbnail').value = item.thumbnail_url || ''; $('portfolioOrder').value = item.sort_order || 0;
+    $('portfolioOrder').value = item.sort_order || 0; updatePortfolioThumbnailPreview();
     $('portfolioPublished').checked = !!item.is_published; $('portfolioSaveButton').textContent = 'Save Creation'; $('portfolioCancelButton').hidden = false;
     $('portfolioForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -303,13 +345,19 @@ $('portfolioTable').addEventListener('click', async event => {
     if (error) showMessage(`Delete failed: ${error.message}`, 'error'); else { showMessage('Creation deleted.'); await loadPortfolio(); }
   }
 });
-function resetPortfolioForm() { $('portfolioForm').reset(); $('portfolioId').value = ''; $('portfolioOrder').value = 0; $('portfolioPublished').checked = true; $('portfolioSaveButton').textContent = 'Add Creation'; $('portfolioCancelButton').hidden = true; }
+function resetPortfolioForm() { $('portfolioForm').reset(); $('portfolioId').value = ''; $('portfolioOrder').value = 0; $('portfolioPublished').checked = true; $('portfolioSaveButton').textContent = 'Add Creation'; $('portfolioCancelButton').hidden = true; updatePortfolioThumbnailPreview(); }
 $('portfolioCancelButton').addEventListener('click', resetPortfolioForm);
 $('refreshPortfolio').addEventListener('click', loadPortfolio);
 $('portfolioForm').addEventListener('submit', async event => {
   event.preventDefault(); const button = $('portfolioSaveButton'); setBusy(button, true);
   const id = $('portfolioId').value;
-  const record = { title: $('portfolioTitle').value.trim(), description: $('portfolioDescription').value.trim(), youtube_url: $('portfolioYoutube').value.trim() || null, thumbnail_url: $('portfolioThumbnail').value.trim() || null, sort_order: Number($('portfolioOrder').value || 0), is_published: $('portfolioPublished').checked, updated_at: new Date().toISOString() };
+  const youtubeUrl = $('portfolioYoutube').value.trim();
+  const videoId = youtubeUrl ? getYouTubeVideoId(youtubeUrl) : '';
+  if (youtubeUrl && !videoId) {
+    setBusy(button, false);
+    return showMessage('Please enter a valid YouTube video link (watch, youtu.be, Shorts or live URL).', 'error');
+  }
+  const record = { title: $('portfolioTitle').value.trim(), description: $('portfolioDescription').value.trim(), youtube_url: youtubeUrl || null, thumbnail_url: videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null, sort_order: Number($('portfolioOrder').value || 0), is_published: $('portfolioPublished').checked, updated_at: new Date().toISOString() };
   const request = id ? supabaseClient.from('site_portfolio').update(record).eq('id', id) : supabaseClient.from('site_portfolio').insert(record);
   const { error } = await request; setBusy(button, false);
   if (error) return showMessage(`Creation save failed: ${error.message}`, 'error');
