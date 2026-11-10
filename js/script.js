@@ -79,9 +79,19 @@ function renderHome(value = {}) {
   if (logo && logoUrl) { logo.src = logoUrl; logo.hidden = false; }
   const hero = document.getElementById('heroArt');
   const heroUrl = safeUrl(value.heroImageUrl || '');
-  if (hero && heroUrl) {
-    hero.style.backgroundImage = `linear-gradient(rgba(24,37,27,.25), rgba(24,37,27,.55)), url("${heroUrl}")`;
-    hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center';
+  if (hero) {
+    hero.classList.toggle('has-custom-image', Boolean(heroUrl));
+    if (heroUrl) {
+      hero.style.backgroundImage = `url("${heroUrl}")`;
+      hero.style.backgroundSize = 'contain';
+      hero.style.backgroundRepeat = 'no-repeat';
+      hero.style.backgroundPosition = 'center';
+    } else {
+      hero.style.backgroundImage = '';
+      hero.style.backgroundSize = '';
+      hero.style.backgroundRepeat = '';
+      hero.style.backgroundPosition = '';
+    }
   }
   [['homePrimaryButton', value.primaryText, value.primaryUrl],
    ['homeSecondaryButton', value.secondaryText, value.secondaryUrl]].forEach(([id, text, href]) => {
@@ -193,7 +203,7 @@ function renderContact(value = {}) {
 
   if (emailLink && value.email) {
     emailLink.href = `mailto:${value.email}`;
-    emailLink.textContent = `Email ${value.email}`;
+    emailLink.textContent = `Email - ${value.email}`;
   }
 
   const phone = document.getElementById('contactPhoneText');

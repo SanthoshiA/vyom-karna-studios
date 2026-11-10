@@ -637,3 +637,46 @@ body {
 
 /* Dashboard-managed homepage branding */
 .logo img { max-width: 54px; max-height: 44px; object-fit: contain; vertical-align: middle; margin-right: 8px; }
+
+
+/* Website corrections: custom hero logo and stacked contact links */
+.hero-art.has-custom-image {
+    border-color: transparent;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.hero-art.has-custom-image > .music-symbol,
+.hero-art.has-custom-image > .art-title,
+.hero-art.has-custom-image > .art-subtitle,
+.hero-art.has-custom-image > .gold-line,
+.hero-art.has-custom-image > p {
+    display: none;
+}
+
+#contactEmailLink {
+    display: inline-block;
+}
+
+#contactPhoneText,
+#contactWhatsappLink {
+    display: block;
+    margin: 12px auto 0;
+}
+
+#contactWhatsappLink[hidden] {
+    display: none !important;
+}
+
+#socialLinks.social-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+#socialLinks.social-links a {
+    display: block;
+}
