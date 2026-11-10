@@ -79,9 +79,20 @@ function renderHome(value = {}) {
   if (logo && logoUrl) { logo.src = logoUrl; logo.hidden = false; }
   const hero = document.getElementById('heroArt');
   const heroUrl = safeUrl(value.heroImageUrl || '');
-  if (hero && heroUrl) {
-    hero.style.backgroundImage = `linear-gradient(rgba(24,37,27,.25), rgba(24,37,27,.55)), url("${heroUrl}")`;
-    hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center';
+  if (hero) {
+    if (heroUrl) {
+      hero.classList.add('has-custom-image');
+      hero.style.backgroundImage = `linear-gradient(rgba(24,37,27,.08), rgba(24,37,27,.18)), url("${heroUrl}")`;
+      hero.style.backgroundSize = 'contain';
+      hero.style.backgroundRepeat = 'no-repeat';
+      hero.style.backgroundPosition = 'center';
+    } else {
+      hero.classList.remove('has-custom-image');
+      hero.style.backgroundImage = '';
+      hero.style.backgroundSize = '';
+      hero.style.backgroundRepeat = '';
+      hero.style.backgroundPosition = '';
+    }
   }
   [['homePrimaryButton', value.primaryText, value.primaryUrl],
    ['homeSecondaryButton', value.secondaryText, value.secondaryUrl]].forEach(([id, text, href]) => {
@@ -213,46 +224,110 @@ function renderContact(value = {}) {
   setText('contactMessage', value.message);
 
   const emailLink = document.getElementById('contactEmailLink');
-
+  const emailAddress = document.getElementById('contactEmailAddress');
   if (emailLink && value.email) {
     emailLink.href = `mailto:${value.email}`;
-    emailLink.textContent = `Email ${value.email}`;
+    if (emailAddress) emailAddress.textContent = value.email;
   }
 
   const phone = document.getElementById('contactPhoneText');
-
   if (phone && value.phone) {
     phone.textContent = `Call us: ${value.phone}`;
   }
 
   const whatsapp = document.getElementById('contactWhatsappLink');
   const waDigits = String(value.whatsapp || '').replace(/\D/g, '');
-
-  if (whatsapp && waDigits) {
-    whatsapp.href = `https://wa.me/${waDigits}`;
-    whatsapp.hidden = false;
+  if (whatsapp) {
+    if (waDigits) {
+      whatsapp.href = `https://wa.me/${waDigits}`;
+      whatsapp.hidden = false;
+    } else {
+      whatsapp.hidden = true;
+      whatsapp.removeAttribute('href');
+    }
   }
 
   const social = document.getElementById('socialLinks');
+  if (!social) return;
 
-  if (social) {
-    social.replaceChildren();
+  social.replaceChildren();
 
-    [['Instagram', value.instagram], ['YouTube', value.youtube], ['Facebook', value.facebook]]
-      .forEach(([label, rawUrl]) => {
-        const href = safeUrl(rawUrl || '');
-        if (!href) return;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const icons = {
+    Instagram: {
+      viewBox: '0 0 24 24',
+      paths: [
+        { d: 'M7 2.8h10A4.2 4.2 0 0 1 21.2 7v10a4.2 4.2 0 0 1-4.2 4.2H7A4.2 4.2 0 0 1 2.8 17V7A4.2 4.2 0 0 1 7 2.8Z', fill: 'none' },
+        { d: 'M12 7.2a4.8 4.8 0 1 0 0 9.6 4.8 4.8 0 0 0 0-9.6Z', fill: 'none' },
+        { d: 'M17.6 6.4h.01', fill: 'none' }
+      ]
+    },
+    YouTube: {
+      viewBox: '0 0 24 24',
+      paths: [
+        { d: 'M23 7.1a3 3 0 0 0-2.1-2.1C19 4.5 12 4.5 12 4.5s-7 0-8.9.5A3 3 0 0 0 1 7.1 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.9 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.5 12a31 31 0 0 0-.5-4.9Z', fill: 'none' },
+        { d: 'm9.7 8.5 6.2 3.5-6.2 3.5Z', fill: 'currentColor', stroke: 'none' }
+      ]
+    },
+    Facebook: {
+      viewBox: '0 0 24 24',
+      paths: [
+        { d: 'M13.5 21v-8h2.8l.4-3.1h-3.2v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.3V13h2.8v8Z', fill: 'currentColor', stroke: 'none' }
+      ]
+    }
+  };
 
-        const a = document.createElement('a');
-        a.href = href;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.textContent = label;
-        social.appendChild(a);
+  [['Instagram', value.instagram], ['YouTube', value.youtube], ['Facebook', value.facebook]]
+    .forEach(([label, rawUrl]) => {
+      const href = safeUrl(rawUrl || '');
+      if (!href) return;
+
+      const a = document.createElement('a');
+      a.href = href;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.className = 'contact-item social-contact-item';
+      a.setAttribute('aria-label', `${label} - opens in a new tab`);
+
+      const iconWrap = document.createElement('span');
+      iconWrap.className = `contact-icon social-brand-icon ${label.toLowerCase()}-icon`;
+      iconWrap.setAttribute('aria-hidden', 'true');
+
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', icons[label].viewBox);
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('focusable', 'false');
+
+      icons[label].paths.forEach(spec => {
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', spec.d);
+        path.setAttribute('fill', spec.fill);
+        if (spec.fill === 'none') {
+          path.setAttribute('stroke', 'currentColor');
+          path.setAttribute('stroke-width', '1.8');
+          path.setAttribute('stroke-linecap', 'round');
+          path.setAttribute('stroke-linejoin', 'round');
+        }
+        svg.appendChild(path);
       });
-  }
-}
+      iconWrap.appendChild(svg);
 
+      const copy = document.createElement('span');
+      copy.className = 'contact-item-copy';
+
+      const labelNode = document.createElement('span');
+      labelNode.className = 'contact-label';
+      labelNode.textContent = label.toUpperCase();
+
+      const arrow = document.createElement('span');
+      arrow.className = 'contact-arrow';
+      arrow.textContent = '→';
+
+      copy.append(labelNode, arrow);
+      a.append(iconWrap, copy);
+      social.appendChild(a);
+    });
+}
 async function loadPublicContent() {
   if (typeof supabaseClient === 'undefined') {
     console.warn('Supabase client not available; showing default website content.');
